@@ -29,6 +29,31 @@ When I looked into how Spotify or YouTube actually decide what to show you next,
 energy_score = 1 - abs(song.energy - user.target_energy)
 score = 2*genre_match + 2*mood_match + 1.5*energy_score + 1*acoustic_match
 ```
+
+### Example user profile
+
+```python
+user_profile = {
+    "favorite_genre": "lofi",
+    "favorite_mood": "chill",
+    "target_energy": 0.35,
+    "likes_acoustic": True,
+}
+```
+
+This is enough to clearly separate something like "intense rock" (misses on genre, mood, energy, and acousticness) from "chill lofi" (matches on all four). It's weaker at telling two chill lofi songs apart from *each other*, since energy closeness and the acoustic bonus are all that's left once genre and mood both match.
+
+### Algorithm recipe (finalized)
+
+- **+2.0** genre match
+- **+2.0** mood match (bumped up from the usual "+1.0" — mood tracks "vibe" better than genre does)
+- **+1.5 × energy_score**, where `energy_score = 1 - abs(song.energy - user.target_energy)`
+- **+1.0** if `acousticness > 0.5` matches `likes_acoustic`
+
+**Data flow:** user prefs → loop over every song in `songs.csv`, scoring each → sort by score → take top K → recommendations.
+
+**Bias I expect:** weighting genre/mood so heavily means the system trusts tags over actual feel — a mistagged or loosely-tagged song can get buried even if its energy and acousticness are a great match.
+
 ---
 
 ## Getting Started
