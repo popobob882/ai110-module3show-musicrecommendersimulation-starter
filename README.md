@@ -93,15 +93,27 @@ You can add more tests in `tests/test_recommender.py`.
 
 ## Sample Recommendation Output
 
-Paste a sample of your recommender's output here as a text block so a reader can see what it produces:
+Default profile in `src/main.py`: `genre=pop, mood=happy, energy=0.8`. Output of `python -m src.main`:
 
 ```
-# e.g.:
-# User profile: genre=indie, mood=chill, energy=low
-# Recommendations:
-#   1. ...
-#   2. ...
-#   3. ...
+Loaded songs: 18
+
+Top recommendations:
+
+1. Sunrise City - Score: 5.47
+   Because: genre match (+2.0), mood match (+2.0), energy closeness (+1.47)
+
+2. Rooftop Lights - Score: 3.44
+   Because: mood match (+2.0), energy closeness (+1.44)
+
+3. Gym Hero - Score: 3.30
+   Because: genre match (+2.0), energy closeness (+1.30)
+
+4. Concrete Anthem - Score: 1.47
+   Because: energy closeness (+1.47)
+
+5. Night Drive Loop - Score: 1.42
+   Because: energy closeness (+1.42)
 ```
 
 **Screenshot or video** *(optional)*: <!-- Insert a screenshot or demo video link here -->
