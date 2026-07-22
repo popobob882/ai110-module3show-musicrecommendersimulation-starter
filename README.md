@@ -17,18 +17,18 @@ Replace this paragraph with your own summary of what your version does.
 
 ## How The System Works
 
-Explain your design in plain language.
+When I looked into how Spotify or YouTube actually decide what to show you next, it comes down to two different tricks, usually mixed together. One is collaborative filtering which is basically using songs that other users with similar tastes played/skiped/saved in their playlistand and recommends them for you. It's how you end up finding a song you'd never have picked yourself. The problem is that it falls apart for brand-new songs or new users, since there's no history to compare yet. The other is content-based filtering which basically matches a song's own attributes (things such as genre, tempo, energy) against what one person tends to like. 
 
-Some prompts to answer:
+**`Song` uses:** `genre`, `mood`, `energy`, `tempo_bpm`, `valence`, `danceability`, `acousticness` which is pulled straight from `data/songs.csv`.
 
-- What features does each `Song` use in your system
-  - For example: genre, mood, energy, tempo
-- What information does your `UserProfile` store
-- How does your `Recommender` compute a score for each song
-- How do you choose which songs to recommend
+**`UserProfile` stores:** `favorite_genre`, `favorite_mood`, `target_energy`, `likes_acoustic`.
 
-You can include a simple diagram or bullet list if helpful.
+**How I'm scoring a song:** genre and mood matches each add points, with mood weighted at least as much as genre — in my own experience two songs can share a genre tag and still feel nothing alike, but "chill" usually means chill. Energy isn't a "bigger is better" thing though, so instead of rewarding high energy I reward *closeness* to what the user actually wants:
 
+```
+energy_score = 1 - abs(song.energy - user.target_energy)
+score = 2*genre_match + 2*mood_match + 1.5*energy_score + 1*acoustic_match
+```
 ---
 
 ## Getting Started
@@ -109,14 +109,9 @@ You will go deeper on this in your model card.
 
 ## Reflection
 
-Read and complete `model_card.md`:
+(Fill this in after you've actually built and played with the recommender — see [`model_card.md`](model_card.md) for the fuller writeup.)
 
-[**Model Card**](model_card.md)
-
-Write 1 to 2 paragraphs here about what you learned:
-
-- about how recommenders turn data into predictions
-- about where bias or unfairness could show up in systems like this
+Once you've run it a bit, jot down a paragraph or two here in your own words: what actually surprised you about how a handful of numbers turns into a "recommendation," and where you can imagine this kind of scoring quietly going wrong for someone — like always favoring the loudest genre in the catalog, or never surfacing anything outside a user's stated taste even if they'd probably like it.
 
 
 
